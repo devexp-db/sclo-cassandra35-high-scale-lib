@@ -1,4 +1,17 @@
-Name:          high-scale-lib
+%{?scl:%scl_package high-scale-lib}
+
+%{?scl:%global mvn_scl    rh-maven33}
+%{?scl:%global java_scls  rh-java-common %mvn_scl}
+%{?scl:%global build_scls %java_scls %scl}
+
+%{?scl:
+%global scl_enable() \
+        scl enable %** - <<'_SCL_EOF' \
+        set -x
+%global scl_disable() _SCL_EOF
+}
+
+Name:          %{?scl_prefix}high-scale-lib
 Version:       1.1.4
 Release:       7%{?dist}
 Summary:       A collection of Concurrent and Highly Scalable Utilities
@@ -9,11 +22,22 @@ Summary:       A collection of Concurrent and Highly Scalable Utilities
 # Thanks to Timothy St. Clair tstclair@redhat.com
 License:       Public Domain
 URL:           https://github.com/stephenc/high-scale-lib/
-Source0:       https://github.com/stephenc/high-scale-lib/archive/%{name}-parent-%{version}.tar.gz
+Source0:       https://github.com/stephenc/high-scale-lib/archive/high-scale-lib-parent-%{version}.tar.gz
 
-BuildRequires: maven-local
-BuildRequires: mvn(org.apache.maven.plugins:maven-enforcer-plugin)
-BuildRequires: mvn(org.sonatype.oss:oss-parent:pom:)
+BuildRequires: %{?scl:%mvn_scl-}maven-local
+BuildRequires: %{?scl:%mvn_scl-}mvn(org.apache.maven.plugins:maven-enforcer-plugin)
+BuildRequires: %{?scl:%mvn_scl-}mvn(org.sonatype.oss:oss-parent:pom:)
+
+%{?scl:Requires:%scl_runtime}
+
+%if ! 0%{?rhel}
+# no bash-completion for RHEL
+%global bash_completion 1
+%endif
+
+%if 0%{?bash_completion}
+BuildRequires: bash-completion pkgconfig
+%endif
 
 BuildArch:     noarch
 
@@ -32,7 +56,8 @@ Summary:       Javadoc for %{name}
 This package contains javadoc for %{name}.
 
 %prep
-%setup -q -n %{name}-%{name}-parent-%{version}
+%{?scl:%scl_enable  %build_scls}
+%setup -q -n %{?scl:%pkg_name-%pkg_name-parent-%version}%{!?scl:%name-%name-parent-%version}
 
 find . -name "*.bat" -delete
 %pom_remove_plugin :maven-shade-plugin
@@ -40,13 +65,17 @@ find . -name "*.bat" -delete
 %pom_remove_plugin :maven-shade-plugin java_util_hashtable
 
 sed -i 's/\r//' README
+%{?scl:%scl_disable}
 
 %build
-
+%{?scl:%scl_enable  %build_scls}
 %mvn_build
+%scl_disable
 
 %install
+%{?scl:%scl_enable  %build_scls}
 %mvn_install
+%scl_disable
 
 %files -f .mfiles
 %doc README
