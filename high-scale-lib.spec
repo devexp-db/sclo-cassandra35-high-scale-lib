@@ -1,4 +1,5 @@
 %{?scl:%scl_package high-scale-lib}
+%{!?scl:%global pkg_name %{name}}
 
 %{?scl:%global mvn_scl    rh-maven33}
 %{?scl:%global java_scls  rh-java-common %mvn_scl}
@@ -27,8 +28,8 @@ Source0:       https://github.com/stephenc/high-scale-lib/archive/high-scale-lib
 BuildRequires: %{?scl:%mvn_scl-}maven-local
 BuildRequires: %{?scl:%mvn_scl-}mvn(org.apache.maven.plugins:maven-enforcer-plugin)
 BuildRequires: %{?scl:%mvn_scl-}mvn(org.sonatype.oss:oss-parent:pom:)
-
-%{?scl:Requires:%scl_runtime}
+%{?scl:BuildRequires: %scl_name-build}
+%{?scl:Requires: %scl_runtime}
 
 %if ! 0%{?rhel}
 # no bash-completion for RHEL
@@ -57,7 +58,7 @@ This package contains javadoc for %{name}.
 
 %prep
 %{?scl:%scl_enable  %build_scls}
-%setup -q -n %{?scl:%pkg_name-%pkg_name-parent-%version}%{!?scl:%name-%name-parent-%version}
+%setup -q -n %{pkg_name}-%{pkg_name}-parent-%{version}
 
 find . -name "*.bat" -delete
 %pom_remove_plugin :maven-shade-plugin
