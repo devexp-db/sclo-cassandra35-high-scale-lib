@@ -71,12 +71,12 @@ sed -i 's/\r//' README
 %build
 %{?scl:%scl_enable  %build_scls}
 %mvn_build
-%scl_disable
+%{?scl:%scl_disable}
 
 %install
 %{?scl:%scl_enable  %build_scls}
 %mvn_install
-%scl_disable
+%{?scl:%scl_disable}
 
 %files -f .mfiles
 %doc README
