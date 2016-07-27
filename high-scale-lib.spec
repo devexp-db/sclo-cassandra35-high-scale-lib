@@ -11,8 +11,8 @@ Summary:       A collection of Concurrent and Highly Scalable Utilities
 # opened: https://github.com/stephenc/high-scale-lib/issues/4
 # Thanks to Timothy St. Clair tstclair@redhat.com
 License:       Public Domain
-URL:           https://github.com/stephenc/high-scale-lib/
-Source0:       https://github.com/stephenc/high-scale-lib/archive/high-scale-lib-parent-%{version}.tar.gz
+URL:           https://github.com/stephenc/%{pkg_name}/
+Source0:       https://github.com/stephenc/%{pkg_name}/archive/%{pkg_name}-parent-%{version}.tar.gz
 
 BuildRequires: %{?scl_mvn_prefix}maven-local
 BuildRequires: %{?scl_mvn_prefix}mvn(org.apache.maven.plugins:maven-enforcer-plugin)
