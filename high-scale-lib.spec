@@ -17,7 +17,6 @@ Source0:       https://github.com/stephenc/high-scale-lib/archive/high-scale-lib
 BuildRequires: %{?scl_mvn_prefix}maven-local
 BuildRequires: %{?scl_mvn_prefix}mvn(org.apache.maven.plugins:maven-enforcer-plugin)
 BuildRequires: %{?scl_mvn_prefix}mvn(org.sonatype.oss:oss-parent:pom:)
-%{?scl:BuildRequires: %scl_name-build}
 %{?scl:Requires: %scl_runtime}
 
 BuildArch:     noarch
