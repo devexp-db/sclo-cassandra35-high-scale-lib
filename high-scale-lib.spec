@@ -3,7 +3,7 @@
 
 Name:          %{?scl_prefix}high-scale-lib
 Version:       1.1.4
-Release:       8%{?dist}
+Release:       9%{?dist}
 Summary:       A collection of Concurrent and Highly Scalable Utilities
 # Might want to address with upstream to adjust because
 # http://creativecommons.org/licenses/publicdomain/ 
@@ -46,7 +46,7 @@ find . -name "*.bat" -delete
 %pom_remove_plugin :maven-shade-plugin java_util_hashtable
 
 sed -i 's/\r//' README
-%{?scl_enable}
+%{?scl_disable}
 
 %build
 %{?scl_enable}
@@ -66,5 +66,8 @@ sed -i 's/\r//' README
 %license LICENSE
 
 %changelog
+* Wed Jul 27 2016 Pavel Raiskup <praiskup@redhat.com> - 1.1.4-9
+- typofix
+
 * Tue Jul 26 2016 Pavel Raiskup <praiskup@redhat.com> - 1.1.4-8
 - simplification
