@@ -3,7 +3,7 @@
 
 Name:          %{?scl_prefix}high-scale-lib
 Version:       1.1.4
-Release:       9%{?dist}
+Release:       10%{?dist}
 Summary:       A collection of Concurrent and Highly Scalable Utilities
 # Might want to address with upstream to adjust because
 # http://creativecommons.org/licenses/publicdomain/ 
@@ -14,9 +14,9 @@ License:       Public Domain
 URL:           https://github.com/stephenc/%{pkg_name}/
 Source0:       https://github.com/stephenc/%{pkg_name}/archive/%{pkg_name}-parent-%{version}.tar.gz
 
-BuildRequires: %{?scl_mvn_prefix}maven-local
-BuildRequires: %{?scl_mvn_prefix}mvn(org.apache.maven.plugins:maven-enforcer-plugin)
-BuildRequires: %{?scl_mvn_prefix}mvn(org.sonatype.oss:oss-parent:pom:)
+BuildRequires: %{?scl_prefix_maven}maven-local
+BuildRequires: %{?scl_prefix_maven}mvn(org.apache.maven.plugins:maven-enforcer-plugin)
+BuildRequires: %{?scl_prefix_maven}mvn(org.sonatype.oss:oss-parent:pom:)
 %{?scl:Requires: %scl_runtime}
 
 BuildArch:     noarch
@@ -36,26 +36,26 @@ Summary:       Javadoc for %{name}
 This package contains javadoc for %{name}.
 
 %prep
-%{?scl_enable}
 %setup -q -n %{pkg_name}-%{pkg_name}-parent-%{version}
 
 find . -name "*.bat" -delete
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 %pom_remove_plugin :maven-shade-plugin
 %pom_remove_plugin :maven-shade-plugin java_util_concurrent_chm
 %pom_remove_plugin :maven-shade-plugin java_util_hashtable
+%{?scl:EOF}
 
 sed -i 's/\r//' README
-%{?scl_disable}
 
 %build
-%{?scl_enable}
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 %mvn_build
-%{?scl_disable}
+%{?scl:EOF}
 
 %install
-%{?scl_enable}
+%{?scl:scl enable %{scl_maven} %{scl} - << "EOF"}
 %mvn_install
-%{?scl_disable}
+%{?scl:EOF}
 
 %files -f .mfiles
 %doc README
@@ -65,6 +65,9 @@ sed -i 's/\r//' README
 %license LICENSE
 
 %changelog
+* Tue Oct 11 2016 Tomas Repik <trepik@redhat.com> - 1.1.4-10
+- use standard SCL macros
+
 * Wed Jul 27 2016 Pavel Raiskup <praiskup@redhat.com> - 1.1.4-9
 - typofix
 
